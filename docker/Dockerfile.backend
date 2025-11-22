@@ -38,6 +38,10 @@ RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-${TA_LIB_VERSION}-src.
 # ──────────────────────────────────────────────────────────────
 FROM golang:${GO_VERSION} AS backend-builder
 
+# 2. [优化] 设置 Go 模块代理为七牛云 (goproxy.cn)
+ENV GOPROXY=https://goproxy.cn,direct
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk update && apk add --no-cache git make gcc g++ musl-dev
 
 COPY --from=ta-lib-builder /usr/local /usr/local
